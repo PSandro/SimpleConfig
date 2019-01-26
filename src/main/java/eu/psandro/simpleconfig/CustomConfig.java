@@ -22,6 +22,12 @@ public class CustomConfig {
     private final Yaml yaml = createYaml();
     private final @NonNull Path path;
 
+    public void loadConfig() throws IOException {
+        final String data = new String(Files.readAllBytes(this.path), CHARSET);
+        this.config.clear();
+        this.config = yaml.load(data);
+    }
+
     public void loadConfig(@NonNull InputStream is) {
         this.config.clear();
         this.config = yaml.load(is);

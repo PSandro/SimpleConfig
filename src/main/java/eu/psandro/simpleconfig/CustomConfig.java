@@ -50,6 +50,15 @@ public class CustomConfig {
         }
     }
 
+    public Map<String, Object> getEntries() {
+        return this.config;
+    }
+
+    public <E> E get(String key, Class<E> type) {
+        return (E) this.config.get(key);
+    }
+
+
     public Optional<Entry> findInQueue(final @NonNull String key) {
         return this.queue.stream().filter(entry -> entry.matchesKey(key)).findAny();
     }

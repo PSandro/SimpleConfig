@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author PSandro on 26.01.19
@@ -23,7 +23,6 @@ public class ConfigSerializer {
     public static String serialize(Set<Entry> data, Yaml yaml) {
         if (data.isEmpty()) return yaml.dump(null);
 
-        final Stream<Entry> dataStream = data.stream();
         final String rawYaml = generateYaml(
                 data.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue))
                 , yaml);
@@ -53,10 +52,11 @@ public class ConfigSerializer {
             currentIndents = indents;
 
             final String finalKey = key;
-            dataStream.filter(entry -> entry.matchesKey(finalKey)).findAny().ifPresent(match -> {
-                final String comment = buildComment(match, indentText);
+            Optional<Entry> optionalEntry = data.stream().filter(entry -> entry.matchesKey(finalKey)).findAny();
+            if (optionalEntry.isPresent()) {
+                final String comment = buildComment(optionalEntry.get(), indentText);
                 fileData.append(comment).append('\n');
-            });
+            }
 
             fileData.append(line).append('\n');
         }

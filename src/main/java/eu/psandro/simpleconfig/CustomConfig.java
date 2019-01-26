@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -20,27 +20,30 @@ public class CustomConfig {
     private Map<String, Object> config = new HashMap<>();
     private final @NonNull Set<Entry> queue = new HashSet<>();
     private final Yaml yaml = createYaml();
-    private final @NonNull Path path;
+    private final @NonNull File file;
 
     public void loadConfig() throws IOException {
-        final String data = new String(Files.readAllBytes(this.path), CHARSET);
-        this.config.clear();
+        final String data = new String(Files.readAllBytes(this.file.toPath()), CHARSET);
         this.config = yaml.load(data);
     }
 
     public void loadConfig(@NonNull InputStream is) {
-        this.config.clear();
         this.config = yaml.load(is);
     }
 
     public String saveConfigToString() {
         return ConfigSerializer.serialize(this.queue, this.yaml);
     }
+    public void clear() {
+        this.config.clear();
+        this.queue.clear();
+    }
 
     public void saveConfig() throws IOException {
         final byte[] bytes = this.saveConfigToString().getBytes(CHARSET);
-        this.path.toFile().mkdirs();
-        Files.write(this.path, bytes);
+        this.file.getParentFile().mkdirs();
+        this.file.createNewFile();
+        Files.write(this.file.toPath(), bytes);
     }
 
     public void set(@NonNull Entry... entries) {

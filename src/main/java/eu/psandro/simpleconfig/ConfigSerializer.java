@@ -55,7 +55,7 @@ public class ConfigSerializer {
             final String finalKey = key;
             dataStream.filter(entry -> entry.matchesKey(finalKey)).findAny().ifPresent(match -> {
                 final String comment = buildComment(match, indentText);
-                fileData.append(comment);
+                fileData.append(comment).append('\n');
             });
 
             fileData.append(line).append('\n');

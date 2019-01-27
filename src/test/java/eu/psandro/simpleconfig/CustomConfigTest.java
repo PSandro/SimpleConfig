@@ -20,7 +20,7 @@ public class CustomConfigTest {
 
     @Before
     public void setUp() throws Exception {
-        customConfig = new CustomConfig(new File("src/test/resources/test.yml"));
+        customConfig = new CustomConfig(new File("src/test/resources/customConfigTest.yml"));
         final Entry<Boolean> entry = new Entry(true, "i-am-hot");
         entry.setComment("What is the sense of life?");
         customConfig.set(entry);

@@ -25,7 +25,7 @@
 hs_err_pid*
 ### Maven template
 target/
-src/test/resources/test.yml
+src/test/resources/*.yml
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

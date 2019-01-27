@@ -1,5 +1,7 @@
 package eu.psandro.simpleconfig;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.yaml.snakeyaml.DumperOptions;
@@ -17,7 +19,7 @@ public class CustomConfig {
 
     private static final Charset CHARSET = Charset.forName("UTF-8");
 
-    private Map<String, Object> config = new HashMap<>();
+    protected @NonNull Map<String, Object> config = new HashMap<>();
     private final @NonNull Set<Entry> queue = new HashSet<>();
     private final Yaml yaml = createYaml();
     private final @NonNull File file;
@@ -34,6 +36,7 @@ public class CustomConfig {
     public String saveConfigToString() {
         return ConfigSerializer.serialize(this.queue, this.yaml);
     }
+
     public void clear() {
         this.config.clear();
         this.queue.clear();
@@ -59,6 +62,15 @@ public class CustomConfig {
 
     public <E> E get(String key, Class<E> type) {
         return (E) this.config.get(key);
+    }
+
+    public <E> E getOrSet(@NonNull String key, @NonNull Class<E> type, Entry<E> def) {
+        if (this.config.containsKey(key)) {
+            return (E) this.config.get(key);
+        } else {
+            this.set(def);
+            return def.getValue();
+        }
     }
 
 

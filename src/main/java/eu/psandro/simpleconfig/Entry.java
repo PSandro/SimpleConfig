@@ -14,5 +14,9 @@ public class Entry<E> {
         return this.key.equals(other);
     }
 
+    public boolean hasComment() {
+        return this.comment != null && !this.comment.isEmpty();
+    }
+
 
 }

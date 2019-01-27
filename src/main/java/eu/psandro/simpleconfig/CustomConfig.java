@@ -1,7 +1,5 @@
 package eu.psandro.simpleconfig;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.yaml.snakeyaml.DumperOptions;
